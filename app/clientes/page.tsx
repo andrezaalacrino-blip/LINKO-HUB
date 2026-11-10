@@ -8,6 +8,7 @@ import {
 } from "react";
 
 import {
+  AtSign,
   CalendarDays,
   Check,
   ChevronLeft,
@@ -27,6 +28,10 @@ import {
 } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import {
+  InstagramPanel,
+  InstagramResultNotice,
+} from "@/components/instagram-connection";
 import { createClient } from "@/utils/supabase/client";
 
 type ContractStatus =
@@ -119,6 +124,9 @@ export default function ClientesPage() {
   const [editingId, setEditingId] = useState<string | null>(
     null
   );
+
+  const [instagramClient, setInstagramClient] =
+    useState<{ id: string; name: string } | null>(null);
 
   const [
     editingContractId,
@@ -824,6 +832,18 @@ export default function ClientesPage() {
         </button>
       }
     >
+      <InstagramResultNotice />
+
+      {instagramClient && (
+        <InstagramPanel
+          clientId={instagramClient.id}
+          clientName={instagramClient.name}
+          onClose={() =>
+            setInstagramClient(null)
+          }
+        />
+      )}
+
       {message && (
         <div className="mb-6 rounded-2xl border border-[#424958] bg-[#292e36] px-4 py-3 text-sm text-[#c5cad3]">
           {message}
@@ -1069,6 +1089,23 @@ export default function ClientesPage() {
 
                       <td className="px-6 py-5">
                         <div className="flex items-center justify-end gap-2">
+                          <button
+                            type="button"
+                            title="Instagram"
+                            aria-label={`Instagram de ${client.name}`}
+                            onClick={() =>
+                              setInstagramClient({
+                                id: client.id,
+                                name: client.name,
+                              })
+                            }
+                            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#3d444f] bg-[#23272f] text-[#a0a7b3] hover:text-white"
+                          >
+                            <AtSign
+                              size={16}
+                            />
+                          </button>
+
                           <button
                             type="button"
                             title="Editar cliente"
